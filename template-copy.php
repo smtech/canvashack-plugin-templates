@@ -7,7 +7,7 @@ require_once(SMCANVASLIB_PATH . '/include/cache.inc.php');
 list($objectType, $objectId) = explode('@', $_REQUEST['template_id']);
 if ($objectType == 'rebuild') {
 	resetCache('key', "templates-$objectId");
-	header('Location: ' . SCHOOL_CANVAS_INSTANCE . "/courses/$objectId");
+	header('Location: ' . str_replace('/api/v1', '', CANVAS_API_URL) . "/courses/$objectId");
 	exit;
 }
 preg_match('|/courses/(\d+)/|', $objectId, $matches);
