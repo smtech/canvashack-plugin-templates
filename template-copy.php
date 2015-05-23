@@ -9,6 +9,9 @@ if ($objectType == 'rebuild') {
 	resetCache('key', "templates-$objectId");
 	header('Location: ' . str_replace('/api/v1', '', CANVAS_API_URL) . "/courses/$objectId"); // FIXME this is a hacky way to get the instance URL, there must be something better in SMCanvasLib that I've forgotten about
 	exit;
+} elseif ($objectType == 'help') {
+	header('Location: ' . HELP_URL);
+	exit;
 }
 
 preg_match('|/courses/(\d+)/|', $objectId, $matches);

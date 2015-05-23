@@ -26,23 +26,30 @@ if (!$templatesHtml) {
 			in_array('online_quiz', $assignmentTemplate['submission_types'])) {
 			unset($assignmentTemplates[$key]);
 	}
-	
-	$discussionTemplates = $api->get("/courses/$courseId/discussion_topics",array(
+
+	// TODO unmask discussion templating (after faculty meetings)
+	$discussionTemplates = array();
+/*	$discussionTemplates = $api->get("/courses/$courseId/discussion_topics",array(
 		'search_term' => TEMPLATE_TAG
 	));
+*/
 	/* filter out unsupported discussion types */
 	foreach($discussionTemplates as $key=>$discussionTemplate) {
 		if ($discussionTemplate['assignment_id'] != 0) {
 			unset($discussionTemplates[$key]);
 		}
 	}
-	
-	$pageTemplates = $api->get("/courses/$courseId/pages",array(
+
+	// TODO unmaks page templating (after faculty meetings)
+	$pageTemplates = array();	
+/*	$pageTemplates = $api->get("/courses/$courseId/pages",array(
 		'search_term' => TEMPLATE_TAG
 	));
+*/
 
-	$singleTemplate = (count($assignmentTemplates) + count($discussionTemplates) + count($pageTemplates)) == 1;
-	
+	$templateCount = count($assignmentTemplates) + count($discussionTemplates) + count($pageTemplates);
+	$singleTemplate = $templateCount == 1;
+
 	/* build the HTML for the template chooser */
 	$templatesHtml = '<form id="stmarks-template-chooser" method="post" action="' . APP_URL . '/template-copy.php"><select id="template_id" name="template_id" onchange="stmarks_rebuildTemplateList();"><option disabled selected>Choose a template</option><option disabled />';
 	
@@ -71,10 +78,18 @@ if (!$templatesHtml) {
 			$templatesHtml .= '<option value="pages' . TYPE_SEPARATOR . '/courses/' . $courseId . '/pages/' . $pageTemplate['url'] . '"' . ($singleTemplate ? ' selected' : '') . '>' . $templateName . '</option>';
 		}
 		$templatesHtml .= '</optgroup>';
+		
+	}
+	
+	if ($templateCount == 0) {
+		$templatesHtml .= '<option value="help@' . $courseId . '" selected>What are templates?</option>';
+	} else {
+		$templatesHtml .= '<option disabled /><option value="help@' . $courseId . '">What are templates?</option>';
 	}
 
 	$templatesHtml .= '<option disabled /><option value="rebuild@' . $courseId . '">Rebuild Template List</option>';
-	$templatesHtml .= '</select><input type="submit" value="Create" />';
+	$templatesHtml .= '</select><input type="submit" value="Go" />';
+
 	setCache('key', "templates-$courseId", 'data', $templatesHtml);
 }
 
@@ -82,6 +97,8 @@ if (!$templatesHtml) {
 function stmarks_rebuildTemplateList() {
 	var templateChooser = document.getElementById('stmarks-template-chooser');
 	if (templateChooser.template_id.value == 'rebuild<?= TYPE_SEPARATOR . $courseId ?>') {
+		templateChooser.submit();
+	} else if (templateChooser.template_id.value=='help<?= TYPE_SEPARATOR . $courseId ?>') {
 		templateChooser.submit();
 	}
 }
