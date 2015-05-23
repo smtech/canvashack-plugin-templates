@@ -3,6 +3,7 @@
 define('TOOL_NAME', 'Templating Service');
 define('CACHE_DURATION', 21600); // 6 hours
 define('TEMPLATE_TAG', '[TEMPLATE]');
+define('TEMPLATE_COPY', 'COPY');
 define('TYPE_SEPARATOR', '@');
 
 if (!defined('CANVAS_API_URL')) {
