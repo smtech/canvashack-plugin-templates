@@ -21,7 +21,9 @@ if (!$templatesHtml) {
 	/* filter out unsupported assignment types */
 	// TODO support those assignment types!
 	foreach($assignmentTemplates as $key=>$assignmentTemplate)
-		if (in_array('discussion_topic', $assignmentTemplate['submission_types']) || in_array('external_tool', $assignmentTemplate['submission_types'])) {
+		if (in_array('discussion_topic', $assignmentTemplate['submission_types']) ||
+			in_array('external_tool', $assignmentTemplate['submission_types']) ||
+			in_array('online_quiz', $assignmentTemplate['submission_types'])) {
 			unset($assignmentTemplates[$key]);
 	}
 	

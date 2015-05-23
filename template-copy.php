@@ -28,14 +28,26 @@ switch($objectType) {
 		unset($template['id']);
 		unset($template['created_at']);
 		unset($template['updated_at']);
+		unset($template['has_overrides']);
+		unset($template['all_dates']);
 		unset($template['course_id']);
-		unset($template['has_submitted_submissions']);
-		unset($template['muted']);
 		unset($template['html_url']);
+		unset($template['peer_review_count']);
 		unset($template['needs_grading_count']);
-		unset($template['locked_for_user']);
+		unset($template['needs_grading_count_by_section']);
 		unset($template['unpublishable']);
+		unset($template['locked_for_user']);
+		unset($template['lock_info']);
+		unset($template['lock_explanation']);
+
+		// TODO Post Grades to SIS fields ignroed
+		// TODO AssignmentFreezer fields ignored
 		
+		// TODO handle quizzes intelligently -- https://github.com/smtech/smcanvas-templates/issues/3
+		// TODO handle graded discussions intelligently -- https://github.com/smtech/smcanvas-templates/issues/2
+		// TODO handle external tools intelligently -- https://github.com/smtech/smcanvas-templates/issues/1
+		// TODO handle rubrics intelligently -- https://github.com/smtech/smcanvas-templates/issues/4
+ 		
 		$params = array('assignment' => $template);
 		$newObject = $api->post("/courses/$courseId/$objectType", $params);
 		break;
