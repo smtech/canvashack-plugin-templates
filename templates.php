@@ -18,9 +18,23 @@ if (!$templatesHtml) {
 	$assignmentTemplates = $api->get("/courses/$courseId/assignments",array(
 		'search_term' => TEMPLATE_TAG
 	));
-		$discussionTemplates = $api->get("/courses/$courseId/discussion_topics",array(
+	/* filter out unsupported assignment types */
+	// TODO support those assignment types!
+	foreach($assignmentTemplates as $key=>$assignmentTemplate)
+		if (in_array('discussion_topic', $assignmentTemplate['submission_types']) || in_array('external_tool', $assignmentTemplate['submission_types'])) {
+			unset($assignmentTemplates[$key]);
+	}
+	
+	$discussionTemplates = $api->get("/courses/$courseId/discussion_topics",array(
 		'search_term' => TEMPLATE_TAG
 	));
+	/* filter out unsupported discussion types */
+	foreach($discussionTemplates as $key=>$discussionTemplate) {
+		if ($discussionTemplate['assignment_id'] != 0) {
+			unset($discussionTemplates[$key]);
+		}
+	}
+	
 	$pageTemplates = $api->get("/courses/$courseId/pages",array(
 		'search_term' => TEMPLATE_TAG
 	));
@@ -34,7 +48,7 @@ if (!$templatesHtml) {
 		$templatesHtml .= '<optgroup label="Assignments">';
 		foreach($assignmentTemplates as $assignmentTemplate) {
 			$templateName = trim(str_replace(TEMPLATE_TAG, '', $assignmentTemplate['name']));
-			$templatesHtml .= '<option value="assignments' . TYPE_SEPARATOR . '/courses/' . $courseId . '/assignments/' . $assignmentTemplate['id'] . '"' . ($singleTemplate ? ' selected' : '') . '>' . $templateName . '</option>';
+			$templatesHtml .= '<option value="assignments' . TYPE_SEPARATOR . '/courses/' . $courseId . '/assignments/' . $assignmentTemplate['id'] . '"' . ($singleTemplate ? ' selected' : '') . '>' . $templateName . '</option>';			
 		}
 		$templatesHtml .= '</optgroup>';
 	}
@@ -42,11 +56,8 @@ if (!$templatesHtml) {
 	if (count($discussionTemplates) > 0) {
 		$templatesHtml .= '<optgroup label="Discussions">';
 		foreach($discussionTemplates as $discussionTemplate) {
-			/* filter out graded discussions, which show up under assignments as well */
-			if ($discussionTemplate['assignment_id'] == 0) {
-				$templateName = trim(str_replace(TEMPLATE_TAG, '', $discussionTemplate['title']));
-				$templatesHtml .= '<option value="discussion_topics' . TYPE_SEPARATOR . '/courses/' . $courseId . '/discussion_topics/' . $discussionTemplate['id'] . '"' . ($singleTemplate ? ' selected' : '') . '>' . $templateName . '</option>';
-			}
+			$templateName = trim(str_replace(TEMPLATE_TAG, '', $discussionTemplate['title']));
+			$templatesHtml .= '<option value="discussion_topics' . TYPE_SEPARATOR . '/courses/' . $courseId . '/discussion_topics/' . $discussionTemplate['id'] . '"' . ($singleTemplate ? ' selected' : '') . '>' . $templateName . '</option>';
 		}
 		$templatesHtml .= '</optgroup>';
 	}
