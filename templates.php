@@ -14,47 +14,53 @@ $templatesHtml = getCache('key', "templates-$courseId", 'data');
 if (!$templatesHtml) {
 	$api = new CanvasApiProcess(CANVAS_API_URL, CANVAS_API_TOKEN);
 	
+	/* collect all the of the templates */
 	$assignmentTemplates = $api->get("/courses/$courseId/assignments",array(
 		'search_term' => TEMPLATE_TAG
 	));
-	$templatesHtml = '<form id="stmarks-template-chooser" method="post" action="' . APP_URL . '/template-copy.php"><select id="template_id" name="template_id" onchange="stmarks_rebuildTemplateList();"><option disabled selected>Choose a template</option>';
-	if (sizeof($assignmentTemplates > 0)) {
+		$discussionTemplates = $api->get("/courses/$courseId/discussion_topics",array(
+		'search_term' => TEMPLATE_TAG
+	));
+	$pageTemplates = $api->get("/courses/$courseId/pages",array(
+		'search_term' => TEMPLATE_TAG
+	));
+
+	$singleTemplate = (count($assignmentTemplates) + count($discussionTemplates) + count($pageTemplates)) == 1;
+	
+	/* build the HTML for the template chooser */
+	$templatesHtml = '<form id="stmarks-template-chooser" method="post" action="' . APP_URL . '/template-copy.php"><select id="template_id" name="template_id" onchange="stmarks_rebuildTemplateList();"><option disabled selected>Choose a template</option><option disabled />';
+	
+	if (count($assignmentTemplates) > 0) {
 		$templatesHtml .= '<optgroup label="Assignments">';
 		foreach($assignmentTemplates as $assignmentTemplate) {
 			$templateName = trim(str_replace(TEMPLATE_TAG, '', $assignmentTemplate['name']));
-			$templatesHtml .= '<option value="assignments' . TYPE_SEPARATOR . '/courses/' . $courseId . '/assignments/' . $assignmentTemplate['id'] . '">' . $templateName . '</option>';
+			$templatesHtml .= '<option value="assignments' . TYPE_SEPARATOR . '/courses/' . $courseId . '/assignments/' . $assignmentTemplate['id'] . '"' . ($singleTemplate ? ' selected' : '') . '>' . $templateName . '</option>';
 		}
 		$templatesHtml .= '</optgroup>';
 	}
 	
-	$discussionTemplates = $api->get("/courses/$courseId/discussion_topics",array(
-		'search_term' => TEMPLATE_TAG
-	));
-	if (sizeof($discussionTemplates > 0)) {
+	if (count($discussionTemplates) > 0) {
 		$templatesHtml .= '<optgroup label="Discussions">';
 		foreach($discussionTemplates as $discussionTemplate) {
 			/* filter out graded discussions, which show up under assignments as well */
 			if ($discussionTemplate['assignment_id'] == 0) {
 				$templateName = trim(str_replace(TEMPLATE_TAG, '', $discussionTemplate['title']));
-				$templatesHtml .= '<option value="discussion_topics' . TYPE_SEPARATOR . '/courses/' . $courseId . '/discussion_topics/' . $discussionTemplate['id'] . '">' . $templateName . '</option>';
+				$templatesHtml .= '<option value="discussion_topics' . TYPE_SEPARATOR . '/courses/' . $courseId . '/discussion_topics/' . $discussionTemplate['id'] . '"' . ($singleTemplate ? ' selected' : '') . '>' . $templateName . '</option>';
 			}
 		}
 		$templatesHtml .= '</optgroup>';
 	}
 
-	$pageTemplates = $api->get("/courses/$courseId/pages",array(
-		'search_term' => TEMPLATE_TAG
-	));
-	if (sizeof($pageTemplates > 0)) {
+	if (count($pageTemplates) > 0) {
 		$templatesHtml .= '<optgroup label="Pages">';
 		foreach($pageTemplates as $pageTemplate) {
 			$templateName = trim(str_replace(TEMPLATE_TAG, '', $pageTemplate['title']));
-			$templatesHtml .= '<option value="pages' . TYPE_SEPARATOR . '/courses/' . $courseId . '/pages/' . $pageTemplate['url'] . '">' . $templateName . '</option>';
+			$templatesHtml .= '<option value="pages' . TYPE_SEPARATOR . '/courses/' . $courseId . '/pages/' . $pageTemplate['url'] . '"' . ($singleTemplate ? ' selected' : '') . '>' . $templateName . '</option>';
 		}
 		$templatesHtml .= '</optgroup>';
 	}
 
-	$templatesHtml .= '<option value="rebuild@' . $courseId . '">Rebuild Template List</option>';
+	$templatesHtml .= '<option disabled /><option value="rebuild@' . $courseId . '">Rebuild Template List</option>';
 	$templatesHtml .= '</select><input type="submit" value="Create" />';
 	setCache('key', "templates-$courseId", 'data', $templatesHtml);
 }
