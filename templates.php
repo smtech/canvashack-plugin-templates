@@ -6,8 +6,12 @@ require_once('config.inc.php');
 require_once(SMCANVASLIB_PATH . '/include/canvas-api.inc.php');
 require_once(SMCANVASLIB_PATH . '/include/cache.inc.php');
 
-preg_match('|.*/courses/(\d+)(/.*)?|', $_REQUEST['location'], $matches);
-$courseId = $matches[1]; // FIXME validation
+if (preg_match('|.*/courses/(\d+)$|', $_REQUEST['location'], $matches))
+{
+	$courseId = $matches[1];
+} else {
+	exit; // we're not on a course page
+}
 
 $templatesHtml = getCache('key', "templates-$courseId", 'data');
 
