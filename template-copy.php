@@ -1,7 +1,7 @@
 <?php
 
+require_once('vendor/autoload.php');
 require_once('config.inc.php');
-require_once(SMCANVASLIB_PATH . '/include/canvas-api.inc.php');
 require_once(SMCANVASLIB_PATH . '/include/cache.inc.php');
 
 list($objectType, $objectId) = explode('@', $_REQUEST['template_id']);
@@ -17,7 +17,7 @@ if ($objectType == 'rebuild') {
 preg_match('|/courses/(\d+)/|', $objectId, $matches);
 $courseId = $matches[1];
 
-$api = new CanvasApiProcess(CANVAS_API_URL, CANVAS_API_TOKEN);
+$api = new CanvasPest(CANVAS_API_URL, CANVAS_API_TOKEN);
 
 $template = $api->get($objectId);
 
@@ -35,6 +35,7 @@ switch($objectType) {
 		unset($template['all_dates']);
 		unset($template['course_id']);
 		unset($template['html_url']);
+		unset($template['has_submitted_submissions']);
 		unset($template['peer_review_count']);
 		unset($template['needs_grading_count']);
 		unset($template['needs_grading_count_by_section']);
@@ -43,7 +44,7 @@ switch($objectType) {
 		unset($template['lock_info']);
 		unset($template['lock_explanation']);
 
-		// TODO Post Grades to SIS fields ignroed
+		// TODO Post Grades to SIS fields ignored
 		// TODO AssignmentFreezer fields ignored
 		
 		// TODO handle quizzes intelligently -- https://github.com/smtech/smcanvas-templates/issues/3

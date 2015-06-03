@@ -1,0 +1,13 @@
+{
+    "name": "smtech/smcanvas-templates",
+    "require": {
+        "smtech/canvaspest": "dev-master"
+    },
+    "authors": [
+        {
+            "name": "Seth Battis",
+            "email": "seth@battis.net"
+        }
+    ],
+    "minimum-stability": "dev"
+}
