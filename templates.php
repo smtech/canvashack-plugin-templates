@@ -31,12 +31,11 @@ if (!$templatesHtml) {
 			unset($assignmentTemplates[$key]);
 	}
 
-	// TODO unmask discussion templating (after faculty meetings)
 	$discussionTemplates = array();
-/*	$discussionTemplates = $api->get("/courses/$courseId/discussion_topics",array(
+	$discussionTemplates = $api->get("/courses/$courseId/discussion_topics",array(
 		'search_term' => TEMPLATE_TAG
 	));
-*/
+
 	/* filter out unsupported discussion types */
 	foreach($discussionTemplates as $key=>$discussionTemplate) {
 		if ($discussionTemplate['assignment_id'] != 0) {
@@ -44,12 +43,11 @@ if (!$templatesHtml) {
 		}
 	}
 
-	// TODO unmaks page templating (after faculty meetings)
 	$pageTemplates = array();	
-/*	$pageTemplates = $api->get("/courses/$courseId/pages",array(
+	$pageTemplates = $api->get("/courses/$courseId/pages",array(
 		'search_term' => TEMPLATE_TAG
 	));
-*/
+
 
 	$templateCount = count($assignmentTemplates) + count($discussionTemplates) + count($pageTemplates);
 	$singleTemplate = $templateCount == 1;

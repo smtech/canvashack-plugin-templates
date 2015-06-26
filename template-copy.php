@@ -26,7 +26,6 @@ switch($objectType) {
 	case 'assignments': {
 		$template['name'] = str_replace(TEMPLATE_TAG, TEMPLATE_COPY, $template['name']);
 				
-		
 		/* fields that shouldn't really be copied */
 		unset($template['id']);
 		unset($template['created_at']);
@@ -44,26 +43,89 @@ switch($objectType) {
 		unset($template['lock_info']);
 		unset($template['lock_explanation']);
 
-		// TODO Post Grades to SIS fields ignored
-		// TODO AssignmentFreezer fields ignored
+		// TODO Post Grades to SIS fields currently ignored
+		
+		// TODO AssignmentFreezer fields currently ignored
 		
 		// TODO handle quizzes intelligently -- https://github.com/smtech/smcanvas-templates/issues/3
-		// TODO handle graded discussions intelligently -- https://github.com/smtech/smcanvas-templates/issues/2
 		// TODO handle external tools intelligently -- https://github.com/smtech/smcanvas-templates/issues/1
 		// TODO handle rubrics intelligently -- https://github.com/smtech/smcanvas-templates/issues/4
  		
 		$params = array('assignment' => $template);
-		$newObject = $api->post("/courses/$courseId/$objectType", $params);
 		break;
 	}
 	case 'discussion_topics': {
+		$template['title'] = str_replace(TEMPLATE_TAG, TEMPLATE_COPY, $template['title']);
+
+		/* fields that shouldn't really be copied */
+		unset($template['id']);
+		unset($template['html_url']);
+		unset($template['posted_at']);
+		unset($template['last_reply_at']);
+		unset($template['user_can_see_posts']);
+		unset($template['discussion_subentry_count']);
+		unset($template['read_state']);
+		unset($template['unread_count']);
+		unset($template['subscribed']);
+		unset($template['subscription_hold']);
+		unset($template['published']);
+		unset($template['locked_for_user']);
+		unset($template['lock_info']);
+		unset($template['lock_explanation']);
+		unset($template['user_name']);
+		unset($template['permissions']);
+		unset($template['topic_children']);
+		
+		// TODO handle graded discussions intelligently -- https://github.com/smtech/smcanvas-templates/issues/2
+		unset($template['assignment_id']);
+		unset($template['root_topic_id']);
+		unset($template['only_graders_can_rate']);
+		
+		// TODO handle podcasts intelligently
+		unset($template['podcast_url']);
+		
+		// TODO handle file attachments intelligently
+		unset($template['attachments']);
+
+		$params = $template;
+
 		break;
+	}
+	case 'pages': {
+		$template['title'] = str_replace(TEMPLATE_TAG, TEMPLATE_COPY, $template['title']);
+
+		/* fields that shouldn't really be copied */
+		unset($template['url']);
+		unset($template['created_at']);
+		unset($template['updated_at']);
+		unset($template['last_edited_by']);
+		unset($template['front_page']);
+		unset($template['locked_for_user']);
+		unset($template['lock_info']);
+		unset($template['lock_explanation']);
+		
+		$params = array('wiki_page' => $template);
+		break;
+	}
+}
+
+$newObject = $api->post("/courses/$courseId/$objectType", $params);
+
+/* post-processing */
+switch ($objectType) {
+	case 'assignments': {
+		break;
+	}
+	case 'discussion_topics': {
+		if (isset($template['allow_rating'])) {
+			$api->put("/courses/$courseId/$objectType/{$newObject['id']}", array('allow_rating' => $param['allow_rating']));
+		}
+		break;	
 	}
 	case 'pages': {
 		break;
 	}
 }
-
 
 header("Location: {$newObject['html_url']}/edit");
 exit;
