@@ -43,9 +43,12 @@ switch($objectType) {
 		unset($template['lock_info']);
 		unset($template['lock_explanation']);
 
-		// TODO Post Grades to SIS fields currently ignored
+		/* Post Grades to SIS fields are ignored -- and it seems to me that
+		   implementing those would _have_ to be a case-by-case, instance-by-
+		   instance set of decisions and code. */
 		
-		// TODO AssignmentFreezer fields currently ignored
+		/* AssignmentFreezer fields are ignored -- dunno what it is, doesn't affect
+		   me. Not gonna worry about it right now. */
 		
 		// TODO handle quizzes intelligently -- https://github.com/smtech/smcanvas-templates/issues/3
 		// TODO handle external tools intelligently -- https://github.com/smtech/smcanvas-templates/issues/1
@@ -81,10 +84,10 @@ switch($objectType) {
 		unset($template['root_topic_id']);
 		unset($template['only_graders_can_rate']);
 		
-		// TODO handle podcasts intelligently
+		// TODO handle podcasts intelligently -- https://github.com/smtech/smcanvas-templates/issues/7
 		unset($template['podcast_url']);
 		
-		// TODO handle file attachments intelligently
+		// TODO handle file attachments intelligently -- https://github.com/smtech/smcanvas-templates/issues/6
 		unset($template['attachments']);
 
 		$params = $template;
@@ -117,9 +120,6 @@ switch ($objectType) {
 		break;
 	}
 	case 'discussion_topics': {
-		if (isset($template['allow_rating'])) {
-			$api->put("/courses/$courseId/$objectType/{$newObject['id']}", array('allow_rating' => $param['allow_rating']));
-		}
 		break;	
 	}
 	case 'pages': {
