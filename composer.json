@@ -1,5 +1,6 @@
 {
     "name": "smtech/smcanvas-templates",
+    "license": "GPL-3.0",
     "require": {
         "smtech/canvaspest": "dev-master"
     },
