@@ -2,7 +2,7 @@
     "name": "canvashack/plugin-templates",
     "license": "GPL-3.0",
     "require": {
-        "smtech/canvaspest": "dev-master"
+        "smtech/canvaspest": "~1.0"
     },
     "authors": [
         {
