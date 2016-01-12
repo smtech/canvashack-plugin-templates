@@ -1,5 +1,5 @@
 {
-    "name": "smtech/smcanvas-templates",
+    "name": "canvashack/plugin-templates",
     "license": "GPL-3.0",
     "require": {
         "smtech/canvaspest": "dev-master"
@@ -7,7 +7,7 @@
     "authors": [
         {
             "name": "Seth Battis",
-            "email": "seth@battis.net"
+            "email": "SethBattis@stmarksschool.org"
         }
     ],
     "minimum-stability": "dev"

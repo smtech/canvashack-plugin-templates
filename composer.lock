@@ -4,20 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "01b903fd6ba037a8865716d9343288c3",
+    "hash": "63b87a6b9e41aed450235a28c47804cc",
+    "content-hash": "11822e8803afb17c5909cb8d8f77fa90",
     "packages": [
         {
-            "name": "educoder/pest",
+            "name": "battis/educoder-pest-fork",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/educoder/pest.git",
-                "reference": "fcb539e03c03bc925b93004097a268e6fd484dd8"
+                "url": "https://github.com/battis/pest.git",
+                "reference": "625347f7925d98cfc9df438b20eae77cfc33cab9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/educoder/pest/zipball/fcb539e03c03bc925b93004097a268e6fd484dd8",
-                "reference": "fcb539e03c03bc925b93004097a268e6fd484dd8",
+                "url": "https://api.github.com/repos/battis/pest/zipball/625347f7925d98cfc9df438b20eae77cfc33cab9",
+                "reference": "625347f7925d98cfc9df438b20eae77cfc33cab9",
                 "shasum": ""
             },
             "require": {
@@ -46,7 +47,7 @@
             ],
             "description": "A proper REST client for PHP.",
             "homepage": "https://github.com/educoder/pest",
-            "time": "2014-09-02 15:51:33"
+            "time": "2015-08-17 19:12:55"
         },
         {
             "name": "smtech/canvaspest",
@@ -54,16 +55,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/smtech/canvaspest.git",
-                "reference": "3b216e5e9703e6b9a3fd79d5051b956857fd4b5e"
+                "reference": "120d3a2f75e29578f5321c0110e283adb7c09807"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/smtech/canvaspest/zipball/3b216e5e9703e6b9a3fd79d5051b956857fd4b5e",
-                "reference": "3b216e5e9703e6b9a3fd79d5051b956857fd4b5e",
+                "url": "https://api.github.com/repos/smtech/canvaspest/zipball/120d3a2f75e29578f5321c0110e283adb7c09807",
+                "reference": "120d3a2f75e29578f5321c0110e283adb7c09807",
                 "shasum": ""
             },
             "require": {
-                "educoder/pest": "dev-master"
+                "battis/educoder-pest-fork": "dev-master"
             },
             "type": "library",
             "autoload": {
@@ -72,6 +73,9 @@
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0"
+            ],
             "authors": [
                 {
                     "name": "Seth Battis",
@@ -79,7 +83,7 @@
                 }
             ],
             "description": "An extension of Pest to make RESTful queries to the Instructure Canvas API",
-            "time": "2015-06-03 03:59:50"
+            "time": "2015-09-11 03:40:35"
         }
     ],
     "packages-dev": [],
