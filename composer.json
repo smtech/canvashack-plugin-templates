@@ -1,5 +1,7 @@
 {
     "name": "canvashack/plugin-templates",
+    "description": "Templating for Canvas course objects",
+    "type": "canvashack-plugin",
     "license": "GPL-3.0",
     "require": {
         "smtech/canvaspest": "~1.0"
