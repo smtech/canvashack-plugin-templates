@@ -1,13 +1,11 @@
 <?php
 
-require_once('vendor/autoload.php');
-require_once('config.inc.php');
-require_once(SMCANVASLIB_PATH . '/include/cache.inc.php');
+require_once('common.inc.php');
 
 list($objectType, $objectId) = explode('@', $_REQUEST['template_id']);
 if ($objectType == 'rebuild') {
-	resetCache('key', "templates-$objectId");
-	header('Location: ' . str_replace('/api/v1', '', CANVAS_API_URL) . "/courses/$objectId"); // FIXME this is a hacky way to get the instance URL, there must be something better in SMCanvasLib that I've forgotten about
+	$cache->resetCache($objectId);
+	header("Location: {$_SESSION['canvasInstanceUrl']}/courses/$objectId");
 	exit;
 } elseif ($objectType == 'help') {
 	header('Location: ' . HELP_URL);
@@ -17,9 +15,7 @@ if ($objectType == 'rebuild') {
 preg_match('|/courses/(\d+)/|', $objectId, $matches);
 $courseId = $matches[1];
 
-$api = new CanvasPest(CANVAS_API_URL, CANVAS_API_TOKEN);
-
-$template = $api->get($objectId);
+$template = $api->get($objectId)->getArrayCopy();
 
 $newObject = null;
 switch($objectType) {

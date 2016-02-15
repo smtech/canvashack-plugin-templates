@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<canvashack>
+	<name>Templates</name>
+	<id>templates</id>
+	<abstract>Templating for Canvas course objects</abstract>
+	<authors>
+		<author>
+			<name>Seth Battis</name>
+			<email>SethBattis@stmarksschool.org</email>
+		</author>
+	</authors>
+	<components>
+		<javascript>templates-loader.js</javascript>
+		<canvas>
+			<pages>
+				<include>
+					<page>
+						<type>regex</type>
+						<pattern>%courses/\d+%</pattern>
+					</page>
+				</include>
+			</pages>
+			<dom>
+				<bundle>
+					<event>load</event>
+					<action>loadTemplates()</action>
+					<selector>#course_show_secondary</selector>
+				</bundle>
+			</dom>
+		</canvas>
+	</components>
+</canvashack>

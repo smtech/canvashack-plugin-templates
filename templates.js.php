@@ -2,9 +2,7 @@
 
 header('Content-Type: application/javascript');
 
-require_once('config.inc.php');
-require_once(SMCANVASLIB_PATH . '/include/canvas-api.inc.php');
-require_once(SMCANVASLIB_PATH . '/include/cache.inc.php');
+require_once('common.inc.php');
 
 if (preg_match('|.*/courses/(\d+)$|', $_REQUEST['location'], $matches))
 {
@@ -13,11 +11,10 @@ if (preg_match('|.*/courses/(\d+)$|', $_REQUEST['location'], $matches))
 	exit; // we're not on a course page
 }
 
-$templatesHtml = getCache('key', "templates-$courseId", 'data');
 
+$templatesHtml = $cache->getCache($courseId);
 if (!$templatesHtml) {
-	$api = new CanvasApiProcess(CANVAS_API_URL, CANVAS_API_TOKEN);
-	
+
 	/* collect all the of the templates */
 	$assignmentTemplates = $api->get("/courses/$courseId/assignments",array(
 		'search_term' => TEMPLATE_TAG
@@ -53,7 +50,6 @@ if (!$templatesHtml) {
 	$singleTemplate = $templateCount == 1;
 
 	/* build the HTML for the template chooser */
-	$templatesHtml = '<form id="stmarks-template-chooser" method="post" action="' . APP_URL . '/template-copy.php"><select id="template_id" name="template_id" onchange="stmarks_rebuildTemplateList();"><option disabled selected>Choose a template</option><option disabled />';
 	
 	if (count($assignmentTemplates) > 0) {
 		$templatesHtml .= '<optgroup label="Assignments">';
@@ -90,40 +86,26 @@ if (!$templatesHtml) {
 	}
 
 	$templatesHtml .= '<option disabled /><option value="rebuild@' . $courseId . '">Rebuild Template List</option>';
-	$templatesHtml .= '</select><input type="submit" value="Go" />';
 
-	setCache('key', "templates-$courseId", 'data', $templatesHtml);
+	$cache->setCache($courseId, $templatesHtml);
 }
 
 ?>
-function stmarks_rebuildTemplateList() {
-	var templateChooser = document.getElementById('stmarks-template-chooser');
-	if (templateChooser.template_id.value == 'rebuild<?= TYPE_SEPARATOR . $courseId ?>') {
-		templateChooser.submit();
-	} else if (templateChooser.template_id.value=='help<?= TYPE_SEPARATOR . $courseId ?>') {
-		templateChooser.submit();
+"use strict";
+var smtech_canvashack_plugin_templates = {
+	selectiveSubmit: function() {
+		var choice = $('#smtech_canvashack_plugin_templates_chooser #template_id option:selected').attr('value');
+		if (choice == 'rebuild<?= TYPE_SEPARATOR . $courseId ?>') {
+			$('#smtech_canvashack_plugin_templates_chooser').submit();
+		} else if (choice == 'help<?= TYPE_SEPARATOR . $courseId ?>') {
+			$('#smtech_canvashack_plugin_templates_chooser').submit();
+		}
+	},
+	add: function() {
+		if ($('#course_show_secondary a[href="/courses/<?= $courseId ?>/analytics"]').length > 0) {
+			$('#course_show_secondary .course-options').append('<div id="stmarks_templates"><form class="form-inline" id="smtech_canvashack_plugin_templates_chooser" method="post" action="<?= $pluginMetadata['PLUGIN_URL'] ?>/template-copy.php"><div class="input-group"><span class="input-group-btn"><input class="btn btn-primary" type="submit" value="New" /></span><select class="form-control" id="template_id" name="template_id" onchange="smtech_canvashack_plugin_templates.selectiveSubmit();" style="width: auto;"><option disabled selected>Choose a template</option><option disabled /><?= $templatesHtml ?></select></div></form></div>');
+		}
 	}
-}
+};
 
-function stmarks_addTemplateChooser(courseSecondary) {
-	var announcementsUrl = /courses\/\d+\/discussion_topics/;
-	var newAnnouncementButton = null;
-	var courseOptions = courseSecondary.getElementsByClassName('course-options')[0].children;
-	for (var i = 0; i < courseOptions.length; i++) {
-		if (announcementsUrl.test(courseOptions[i].href)) {
-			newAnnouncementButton = courseOptions[i];
-		} 
-	}
-	if (newAnnouncementButton != null) {
-		var courseUrl = /.*\/courses\/(\d+).*/;
-		var courseId = document.location.href.match(courseUrl)[1];
-		var templatesChooser = document.createElement('div');
-		templatesChooser.id = 'stmarks_templates';
-		templatesChooser.innerHTML = '<?= $templatesHtml ?>';
-		newAnnouncementButton.parentElement.appendChild(templatesChooser);
-	}
-}
-
-function stmarks_templates() {
-	stmarks_waitForDOMById(/courses\/\d+/, 'course_show_secondary', stmarks_addTemplateChooser);
-}
+smtech_canvashack_plugin_templates.add();
