@@ -55,7 +55,7 @@ if (!$templatesHtml) {
 		$templatesHtml .= '<optgroup label="Assignments">';
 		foreach($assignmentTemplates as $assignmentTemplate) {
 			$templateName = trim(str_replace(TEMPLATE_TAG, '', $assignmentTemplate['name']));
-			$templatesHtml .= '<option value="assignments' . TYPE_SEPARATOR . '/courses/' . $courseId . '/assignments/' . $assignmentTemplate['id'] . '"' . ($singleTemplate ? ' selected' : '') . '>' . $templateName . '</option>';			
+			$templatesHtml .= '<option value="assignments' . TYPE_SEPARATOR . '/courses/' . $courseId . '/assignments/' . $assignmentTemplate['id'] . '"' . ($singleTemplate ? ' selected' : '') . '>' . htmlentities($templateName, ENT_QUOTES) . '</option>';			
 		}
 		$templatesHtml .= '</optgroup>';
 	}
@@ -64,7 +64,7 @@ if (!$templatesHtml) {
 		$templatesHtml .= '<optgroup label="Discussions">';
 		foreach($discussionTemplates as $discussionTemplate) {
 			$templateName = trim(str_replace(TEMPLATE_TAG, '', $discussionTemplate['title']));
-			$templatesHtml .= '<option value="discussion_topics' . TYPE_SEPARATOR . '/courses/' . $courseId . '/discussion_topics/' . $discussionTemplate['id'] . '"' . ($singleTemplate ? ' selected' : '') . '>' . $templateName . '</option>';
+			$templatesHtml .= '<option value="discussion_topics' . TYPE_SEPARATOR . '/courses/' . $courseId . '/discussion_topics/' . $discussionTemplate['id'] . '"' . ($singleTemplate ? ' selected' : '') . '>' . htmlentities($templateName, ENT_QUOTES) . '</option>';
 		}
 		$templatesHtml .= '</optgroup>';
 	}
@@ -73,7 +73,7 @@ if (!$templatesHtml) {
 		$templatesHtml .= '<optgroup label="Pages">';
 		foreach($pageTemplates as $pageTemplate) {
 			$templateName = trim(str_replace(TEMPLATE_TAG, '', $pageTemplate['title']));
-			$templatesHtml .= '<option value="pages' . TYPE_SEPARATOR . '/courses/' . $courseId . '/pages/' . $pageTemplate['url'] . '"' . ($singleTemplate ? ' selected' : '') . '>' . $templateName . '</option>';
+			$templatesHtml .= '<option value="pages' . TYPE_SEPARATOR . '/courses/' . $courseId . '/pages/' . $pageTemplate['url'] . '"' . ($singleTemplate ? ' selected' : '') . '>' . htmlentities($templateName, ENT_QUOTES) . '</option>';
 		}
 		$templatesHtml .= '</optgroup>';
 		
