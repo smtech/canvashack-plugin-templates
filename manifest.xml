@@ -10,7 +10,7 @@
 		</author>
 	</authors>
 	<components>
-		<javascript>templates-loader.js</javascript>
+		<javascript>templates-loader.js.php</javascript>
 		<canvas>
 			<pages>
 				<include>
