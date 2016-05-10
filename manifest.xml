@@ -10,7 +10,7 @@
 		</author>
 	</authors>
 	<components>
-		<javascript>templates-loader.js</javascript>
+		<javascript>templates.js.php</javascript>
 		<canvas>
 			<pages>
 				<include>
@@ -23,7 +23,7 @@
 			<dom>
 				<bundle>
 					<event>load</event>
-					<action>loadTemplates()</action>
+					<action>add()</action>
 					<selector>#course_show_secondary</selector>
 				</bundle>
 			</dom>
