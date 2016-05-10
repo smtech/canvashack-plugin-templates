@@ -1,16 +1,13 @@
 <?php
 
-header('Content-Type: application/javascript');
+require_once __DIR__ . '/common.inc.php';
 
-require_once('common.inc.php');
-
-if (preg_match('|.*/courses/(\d+)$|', $_REQUEST['location'], $matches))
+if (preg_match('|.*/courses/(\d+)$|', $argv[1], $matches))
 {
 	$courseId = $matches[1];
 } else {
 	exit; // we're not on a course page
 }
-
 
 $templatesHtml = $cache->getCache($courseId);
 if (!$templatesHtml) {
@@ -40,7 +37,7 @@ if (!$templatesHtml) {
 		}
 	}
 
-	$pageTemplates = array();	
+	$pageTemplates = array();
 	$pageTemplates = $api->get("/courses/$courseId/pages",array(
 		'search_term' => TEMPLATE_TAG
 	));
@@ -50,16 +47,16 @@ if (!$templatesHtml) {
 	$singleTemplate = $templateCount == 1;
 
 	/* build the HTML for the template chooser */
-	
+
 	if (count($assignmentTemplates) > 0) {
 		$templatesHtml .= '<optgroup label="Assignments">';
 		foreach($assignmentTemplates as $assignmentTemplate) {
 			$templateName = trim(str_replace(TEMPLATE_TAG, '', $assignmentTemplate['name']));
-			$templatesHtml .= '<option value="assignments' . TYPE_SEPARATOR . '/courses/' . $courseId . '/assignments/' . $assignmentTemplate['id'] . '"' . ($singleTemplate ? ' selected' : '') . '>' . htmlentities($templateName, ENT_QUOTES) . '</option>';			
+			$templatesHtml .= '<option value="assignments' . TYPE_SEPARATOR . '/courses/' . $courseId . '/assignments/' . $assignmentTemplate['id'] . '"' . ($singleTemplate ? ' selected' : '') . '>' . htmlentities($templateName, ENT_QUOTES) . '</option>';
 		}
 		$templatesHtml .= '</optgroup>';
 	}
-	
+
 	if (count($discussionTemplates) > 0) {
 		$templatesHtml .= '<optgroup label="Discussions">';
 		foreach($discussionTemplates as $discussionTemplate) {
@@ -76,9 +73,9 @@ if (!$templatesHtml) {
 			$templatesHtml .= '<option value="pages' . TYPE_SEPARATOR . '/courses/' . $courseId . '/pages/' . $pageTemplate['url'] . '"' . ($singleTemplate ? ' selected' : '') . '>' . htmlentities($templateName, ENT_QUOTES) . '</option>';
 		}
 		$templatesHtml .= '</optgroup>';
-		
+
 	}
-	
+
 	if ($templateCount == 0) {
 		$templatesHtml .= '<option value="help@' . $courseId . '" selected>What are templates?</option>';
 	} else {
@@ -91,8 +88,7 @@ if (!$templatesHtml) {
 }
 
 ?>
-"use strict";
-var smtech_canvashack_plugin_templates = {
+var canvashack = {
 	selectiveSubmit: function() {
 		var choice = $('#smtech_canvashack_plugin_templates_chooser #template_id option:selected').attr('value');
 		if (choice == 'rebuild<?= TYPE_SEPARATOR . $courseId ?>') {
@@ -107,5 +103,3 @@ var smtech_canvashack_plugin_templates = {
 		}
 	}
 };
-
-smtech_canvashack_plugin_templates.add();
