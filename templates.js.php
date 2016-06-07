@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/common.inc.php';
 
-if (preg_match('|.*/courses/(\d+)$|', $argv[1], $matches))
+if (preg_match('|.*/courses/(\d+)$|', $_REQUEST['location'], $matches))
 {
 	$courseId = $matches[1];
 } else {
