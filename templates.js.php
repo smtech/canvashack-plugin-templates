@@ -99,7 +99,7 @@ var canvashack = {
 	},
 	add: function() {
 		if (ENV.current_user_roles.indexOf('teacher') > 0 || ENV.current_user_roles.indexOf('admin') > 0) {
-			$('#course_show_secondary .course-options').append('<div id="stmarks_templates"><form class="form-inline" id="smtech_canvashack_plugin_templates_chooser" method="post" action="<?= $pluginMetadata['PLUGIN_URL'] ?>/template-copy.php"><div class="input-group"><span class="input-group-btn"><input class="btn btn-primary" type="submit" value="New" /></span><select class="form-control" id="template_id" name="template_id" onchange="smtech_canvashack_plugin_templates.selectiveSubmit();" style="width: auto;"><option disabled selected>Choose a template</option><option disabled /><?= $templatesHtml ?></select></div></form></div>');
+			$('#course_show_secondary .course-options').append('<div id="stmarks_templates"><form class="form-inline" id="smtech_canvashack_plugin_templates_chooser" method="post" action="<?= $pluginMetadata['PLUGIN_URL'] ?>/template-copy.php"><div class="input-group"><span class="input-group-btn"><input class="btn btn-primary" type="submit" value="New" /></span><select class="form-control" id="template_id" name="template_id" onchange="canvashack.templates.selectiveSubmit();" style="width: auto;"><option disabled selected>Choose a template</option><option disabled /><?= $templatesHtml ?></select></div></form></div>');
 		}
 	}
 };
