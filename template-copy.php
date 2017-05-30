@@ -38,6 +38,9 @@ switch($objectType) {
 		unset($template['locked_for_user']);
 		unset($template['lock_info']);
 		unset($template['lock_explanation']);
+        unset($template['submissions_download_url']);
+        unset($template['in_closed_grading_period']);
+        unset($template['secure_params']);
 
 		/* Post Grades to SIS fields are ignored -- and it seems to me that
 		   implementing those would _have_ to be a case-by-case, instance-by-
@@ -49,7 +52,11 @@ switch($objectType) {
 		// TODO handle quizzes intelligently -- https://github.com/smtech/smcanvas-templates/issues/3
 		// TODO handle external tools intelligently -- https://github.com/smtech/smcanvas-templates/issues/1
 		// TODO handle rubrics intelligently -- https://github.com/smtech/smcanvas-templates/issues/4
- 		
+
+		// TODO handle integrations intelligently
+        unset($template['integration_id']);
+        unset($template['integration_data']);
+
 		$params = array('assignment' => $template);
 		break;
 	}
@@ -125,5 +132,3 @@ switch ($objectType) {
 
 header("Location: {$newObject['html_url']}/edit");
 exit;
-
-?>
